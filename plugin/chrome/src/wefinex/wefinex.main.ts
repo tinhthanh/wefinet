@@ -2,6 +2,8 @@
 import { WefinetController } from '../wefinex/wefinex.controller';
 let reload ;
 const betKeyStore = 'betKey';
+const logsKeyStore = 'logsKey';
+let logs = localStorage.getItem(logsKeyStore) ? JSON.parse(localStorage.getItem(logsKeyStore)) : {};
 const placeBet  = (doc) => {
     const inputPrice =  (document.querySelector('#InputNumber') as HTMLInputElement);
                         inputPrice.value = doc.price  ;
@@ -24,6 +26,8 @@ const placeBet  = (doc) => {
                         }
                         if(currentTime === doc.time) {
                             localStorage.setItem( betKeyStore ,`${doc.time}-${doc.type}`);
+                            logs[`${doc.time}-${doc.type}`] = doc ;
+                            localStorage.setItem(logsKeyStore, JSON.stringify(logs));
                             if(doc.type === 'T') {
                                 const btnSuccess = (document.querySelector('.btnSuccess') as HTMLInputElement) ;
                                 setTimeout(() => { btnSuccess.click()} , 500);
@@ -47,9 +51,7 @@ try {
                if(window.location.href.indexOf('wefinex.net/index') != -1 ) {
                 WefinetController.commandOnChange((data) => {
                     if(reload) {   clearTimeout(reload); }
-
                      reload = setTimeout(() => { window.location.reload(); }, 60*3*1000); 
-
                       if(data && window.location.href.indexOf('wefinex.net/index') != -1 ) {
                         if(document.querySelector('.btnSuccess').getAttribute('disabled') === 'disabled') {
                             const timeWaitEl = document.querySelector('.btnTransparent').textContent.match(/\d+/) ;
@@ -60,7 +62,29 @@ try {
                                }
                              } else {
                             console.log("place bet ...");
-                            placeBet(data);
+                            const d = new Date();
+                            const hours = String(d.getHours()).padStart(2, '0') ;
+                            const minute = String(d.getMinutes()).padStart(2, '0')   ;
+                            
+                            const day =  String(d.getDate()).padStart(2, '0') ;
+                            const month =   String(d.getMonth() + 1).padStart(2, '0') ;
+                            const year = d.getFullYear();
+                            
+                            const datePlace = data.time.split(' ')[0] ;
+                            const timePlace = data.time.split(' ')[1] ;
+
+                            if(`${day}:${month}:${year}` ===  datePlace
+                               && timePlace.split(':')[0] === hours && (
+                                   Number(timePlace.split(':')[1]) > Number(minute) 
+                               )
+                            ) {
+                                const timeAwait  = ( Number(timePlace.split(':')[1]) - Number(minute)) * 60 - new Date().getSeconds() ;
+                                console.log(timeAwait +" s  await for place bet");
+                                setTimeout( () => { placeBet(data); } , timeAwait*1000);
+                            } else {
+                                console.log(" 2s place bet for normal");
+                                setTimeout( () => { placeBet(data); } , 2*1000);
+                            }
                         }
                     }
                 }).then( doc => {
@@ -69,6 +93,9 @@ try {
                 }
            }
        });
- } catch(err) { console.log(err); }
+ } catch(err) { console.log(err);
+   localStorage.setItem('Error' , JSON.stringify(err) );
+     setTimeout( () =>  { } , 60*1000);
+}
  
   
