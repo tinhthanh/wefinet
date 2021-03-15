@@ -6,8 +6,8 @@ const placeBet  = (doc) => {
     const inputPrice =  (document.querySelector('#InputNumber') as HTMLInputElement);
                         inputPrice.value = doc.price  ;
                         const d = new Date();
-                        const hours = d.getHours();
-                        const minute = d.getMinutes() ;
+                        const hours = String(d.getHours()).padStart(2, '0') ;
+                        const minute = String(d.getMinutes()).padStart(2, '0')   ;
                         
                         const day =  String(d.getDate()).padStart(2, '0') ;
                         const month =   String(d.getMonth() + 1).padStart(2, '0') ;
