@@ -30,11 +30,11 @@ const placeBet  = (doc) => {
                             localStorage.setItem(logsKeyStore, JSON.stringify(logs));
                             if(doc.type === 'T') {
                                 const btnSuccess = (document.querySelector('.btnSuccess') as HTMLInputElement) ;
-                                setTimeout(() => { btnSuccess.click()} , 500);
+                                setTimeout(() => { btnSuccess.click()} , 1000);
                                 console.log("BET Tăng " + doc.price);
                             } else if(doc.type === 'G') {
                                 const btnDown = (document.querySelector('.btnDown') as HTMLInputElement ) ;
-                                setTimeout(() => { btnDown.click()} , 500);
+                                setTimeout(() => { btnDown.click()} , 1000);
                                 console.log("BET Giam " + doc.price);
                             }
                         } else {
