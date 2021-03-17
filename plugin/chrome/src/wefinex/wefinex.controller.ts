@@ -49,6 +49,10 @@ export module WefinetController {
           response.json().then((response: any) => {
                 resolve(response);
           });
+        } else {
+          if(response.status === 401) {
+            window.location.reload();
+          }
         }
       });
     });
@@ -65,6 +69,10 @@ export module WefinetController {
                response.json().then((response: any) => {
                   resolve(response.d.e);
               });
+            } else {
+              if(response.status === 401) {
+                window.location.reload();
+              }
             }
         });
     });
