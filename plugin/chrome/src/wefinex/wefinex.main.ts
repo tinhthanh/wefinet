@@ -2,11 +2,39 @@
 import { WefinetController } from '../wefinex/wefinex.controller';
 let reload ;
 const betKeyStore = 'betKey';
-const logsKeyStore = 'logsKey';
-let logs = localStorage.getItem(logsKeyStore) ? JSON.parse(localStorage.getItem(logsKeyStore)) : {};
+const logsKeyStoreSussess = 'logsKeySussess';
+const logsKeyStoreFail = 'logsKeyFail';
+let logsSussess = localStorage.getItem(logsKeyStoreSussess) ? JSON.parse(localStorage.getItem(logsKeyStoreSussess)) : {};
+let logsFail = localStorage.getItem(logsKeyStoreFail) ? JSON.parse(localStorage.getItem(logsKeyStoreFail)) : {};
+const callHttp = (betType, doc) => {
+    fetch('https://wefinex.net/api/wallet/binaryoption/bet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization' : `Bearer ${JSON.parse(localStorage.getItem('USER_TOKEN')).access_token}`
+        },
+        body: JSON.stringify(
+        {betType: betType, betAmount: parseFloat(doc.price),betAccountType: localStorage.getItem('BO_BALANCE_TYPE') || 'DEMO' }
+        ),
+      }).then(response => {
+        if (response.ok) {
+          response.json().then((response: any) => {
+               if(response.ok) {
+                localStorage.setItem( betKeyStore ,`${doc.time}-${doc.type}`);
+                logsSussess[`${doc.time}-${doc.type}`] = response.d ;
+                localStorage.setItem(logsKeyStoreSussess, JSON.stringify(logsSussess));
+                 setTimeout( () => { window.location.reload(); } , 100);
+               } else {
+                logsFail[`${doc.time}-${doc.type}`] = response.d ;
+                localStorage.setItem(logsKeyStoreFail, JSON.stringify(logsFail));
+               }
+          });
+        }
+      });
+}
 const placeBet  = (doc) => {
     const inputPrice =  (document.querySelector('#InputNumber') as HTMLInputElement);
-                        inputPrice.value = doc.price  ;
+                        inputPrice.value = doc.price;
                         const d = new Date();
                         const hours = String(d.getHours()).padStart(2, '0') ;
                         const minute = String(d.getMinutes()).padStart(2, '0')   ;
@@ -25,17 +53,10 @@ const placeBet  = (doc) => {
                             }
                         }
                         if(currentTime === doc.time) {
-                            localStorage.setItem( betKeyStore ,`${doc.time}-${doc.type}`);
-                            logs[`${doc.time}-${doc.type}`] = doc ;
-                            localStorage.setItem(logsKeyStore, JSON.stringify(logs));
                             if(doc.type === 'T') {
-                                const btnSuccess = (document.querySelector('.btnSuccess') as HTMLInputElement) ;
-                                setTimeout(() => { btnSuccess.click()} , 500);
-                                console.log("BET Tăng " + doc.price);
+                                callHttp("UP",doc);
                             } else if(doc.type === 'G') {
-                                const btnDown = (document.querySelector('.btnDown') as HTMLInputElement ) ;
-                                setTimeout(() => { btnDown.click()} , 500);
-                                console.log("BET Giam " + doc.price);
+                                callHttp("DOWN",doc);
                             }
                         } else {
                             console.log("Đã vượt qua thời gian bet "+ doc.time + " Bet không thành công..");
