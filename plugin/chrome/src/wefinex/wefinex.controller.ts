@@ -32,9 +32,59 @@ export module WefinetController {
         resolve({...user});
        });
     });
+};
+  export const placeBet = (betType: string, doc: BetInfo): Promise<any> => {
+    return new Promise( (resolve, _) => {
+      fetch('https://wefinex.net/api/wallet/binaryoption/bet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization' : `Bearer ${JSON.parse(localStorage.getItem('USER_TOKEN')).access_token}`
+        },
+        body: JSON.stringify(
+        {betType: betType, betAmount: parseFloat(doc.price),betAccountType: localStorage.getItem('BO_BALANCE_TYPE') || 'DEMO' }
+        ),
+      }).then(response => {
+        if (response.ok) {
+          response.json().then((response: any) => {
+                resolve(response);
+          });
+        }
+      });
+    });
+  }
+  export const userInfo = (): Promise<any> => {
+    return new Promise( (resolve, _) => {
+      fetch('https://wefinex.net/api/auth/me/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Authorization' : `Bearer ${JSON.parse(localStorage.getItem('USER_TOKEN')).access_token}`
+            }}).then(response => {
+            if (response.ok) { 
+               response.json().then((response: any) => {
+                  resolve(response.d.e);
+              });
+            }
+        });
+    });
+  }
+  export const actionAutoBetOnChange  = (email: string, callback: Function) => {
+         AngularFirestore.collection(T_USER_DOCUMENT).doc(email).onSnapshot((doc) => {
+          if(doc.exists) { 
+            callback(doc.data());
+             } else {
+            callback(undefined);
+          }           
+      });
 }
 }
 export interface UserWefinex {
    userName: string;
    password: string;
+}
+export interface BetInfo {
+    time: string;
+    price: string;
+    type: string;
 }

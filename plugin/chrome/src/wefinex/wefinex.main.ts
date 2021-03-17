@@ -1,40 +1,30 @@
 
-import { WefinetController } from '../wefinex/wefinex.controller';
+import { BetInfo, WefinetController } from '../wefinex/wefinex.controller';
 let reload ;
 const betKeyStore = 'betKey';
 const logsKeyStoreSussess = 'logsKeySussess';
 const logsKeyStoreFail = 'logsKeyFail';
 let logsSussess = localStorage.getItem(logsKeyStoreSussess) ? JSON.parse(localStorage.getItem(logsKeyStoreSussess)) : {};
 let logsFail = localStorage.getItem(logsKeyStoreFail) ? JSON.parse(localStorage.getItem(logsKeyStoreFail)) : {};
-const callHttp = (betType, doc) => {
-    fetch('https://wefinex.net/api/wallet/binaryoption/bet', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          'Authorization' : `Bearer ${JSON.parse(localStorage.getItem('USER_TOKEN')).access_token}`
-        },
-        body: JSON.stringify(
-        {betType: betType, betAmount: parseFloat(doc.price),betAccountType: localStorage.getItem('BO_BALANCE_TYPE') || 'DEMO' }
-        ),
-      }).then(response => {
-        if (response.ok) {
-          response.json().then((response: any) => {
-               if(response.ok) {
-                localStorage.setItem( betKeyStore ,`${doc.time}-${doc.type}`);
-                logsSussess[`${doc.time}-${doc.type}`] = response.d ;
-                localStorage.setItem(logsKeyStoreSussess, JSON.stringify(logsSussess));
-                 setTimeout( () => { window.location.reload(); } , 100);
-               } else {
-                logsFail[`${doc.time}-${doc.type}`] = response.d ;
-                localStorage.setItem(logsKeyStoreFail, JSON.stringify(logsFail));
-               }
-          });
-        }
-      });
+let isAutoFollow = false;
+const callHttp = (betType: string, doc:BetInfo) => {
+    WefinetController.placeBet(betType,doc).then((response: any) => {
+        if(response.ok) {
+            localStorage.setItem( betKeyStore ,`${doc.time}-${doc.type}`);
+            logsSussess[`${doc.time}-${doc.type}`] = response.d ;
+            localStorage.setItem(logsKeyStoreSussess, JSON.stringify(logsSussess));
+            //  setTimeout( () => { window.location.reload(); } , 100);
+            console.log(response);
+            console.log('Bet success....');
+           } else {
+            logsFail[`${doc.time}-${doc.type}`] = response.d ;
+            localStorage.setItem(logsKeyStoreFail, JSON.stringify(logsFail));
+            console.log('Bet failed....')
+            console.log(response);
+           }
+    })
 }
 const placeBet  = (doc) => {
-    const inputPrice =  (document.querySelector('#InputNumber') as HTMLInputElement);
-                        inputPrice.value = doc.price;
                         const d = new Date();
                         const hours = String(d.getHours()).padStart(2, '0') ;
                         const minute = String(d.getMinutes()).padStart(2, '0')   ;
@@ -70,53 +60,71 @@ try {
                window.location.href = 'http://google.com/';
            } else {
                if(window.location.href.indexOf('wefinex.net/index') != -1 ) {
-                WefinetController.commandOnChange((data) => {
-                    if(reload) {   clearTimeout(reload); }
-                     reload = setTimeout(() => { window.location.reload(); }, 60*3*1000); 
-                      if(data && window.location.href.indexOf('wefinex.net/index') != -1 ) {
-                        if(document.querySelector('.btnSuccess').getAttribute('disabled') === 'disabled') {
-                            const timeWaitEl = document.querySelector('.btnTransparent').textContent.match(/\d+/) ;
-                            if(timeWaitEl) {
-                                 const timeAwait =  Number(timeWaitEl[0]) ;
-                                 console.log("Chờ ..." + timeAwait + "s");
-                                  setTimeout( () => {  placeBet(data) } , (timeAwait + 1 )*1000);
-                               }
-                             } else {
-                            console.log("place bet ...");
-                            const d = new Date();
-                            const hours = String(d.getHours()).padStart(2, '0') ;
-                            const minute = String(d.getMinutes()).padStart(2, '0')   ;
-                            
-                            const day =  String(d.getDate()).padStart(2, '0') ;
-                            const month =   String(d.getMonth() + 1).padStart(2, '0') ;
-                            const year = d.getFullYear();
-                            
-                            const datePlace = data.time.split(' ')[0] ;
-                            const timePlace = data.time.split(' ')[1] ;
-
-                            if(`${day}:${month}:${year}` ===  datePlace
-                               && timePlace.split(':')[0] === hours && (
-                                   Number(timePlace.split(':')[1]) > Number(minute) 
-                               )
-                            ) {
-                                const timeAwait  = ( Number(timePlace.split(':')[1]) - Number(minute)) * 60 - new Date().getSeconds() ;
-                                console.log(timeAwait +" s  await for place bet");
-                                setTimeout( () => { placeBet(data); } , timeAwait*1000);
-                            } else {
-                                console.log(" 2s place bet for normal");
-                                setTimeout( () => { placeBet(data); } , 2*1000);
+                WefinetController.userInfo().then( (email) => { 
+                    WefinetController.actionAutoBetOnChange(email, (data) => {
+                        if(data && data.auto) {
+                            if(!isAutoFollow) {
+                                listenerCommand();
+                             }
+                            isAutoFollow = true;
+                        } else {
+                            if(isAutoFollow) {
+                             window.location.reload();
                             }
+                            console.log(`User ${email} cannot auto follow bet. pls contact upline to active`);
                         }
-                    }
-                }).then( doc => {
-                    console.log(doc);
+                    });  
                 });
+               
                 }
            }
        });
  } catch(err) { console.log(err);
    localStorage.setItem('Error' , JSON.stringify(err) );
      setTimeout( () =>  { } , 60*1000);
+}
+const listenerCommand = (): void => {
+    WefinetController.commandOnChange((data) => {
+        if(reload) {   clearTimeout(reload); }
+         reload = setTimeout(() => { window.location.reload(); }, 60*3*1000); 
+          if(data && window.location.href.indexOf('wefinex.net/index') != -1 ) {
+            if(document.querySelector('.btnSuccess').getAttribute('disabled') === 'disabled') {
+                const timeWaitEl = document.querySelector('a.btnTransparent').textContent.match(/\d+/) ;
+                if(timeWaitEl) {
+                     const timeAwait =  Number(timeWaitEl[0]) ;
+                     console.log("Chờ ..." + timeAwait + "s");
+                      setTimeout( () => {  placeBet(data) } , (timeAwait + 1 )*1000);
+                   }
+                 } else {
+                console.log("place bet ...");
+                const d = new Date();
+                const hours = String(d.getHours()).padStart(2, '0') ;
+                const minute = String(d.getMinutes()).padStart(2, '0')   ;
+                
+                const day =  String(d.getDate()).padStart(2, '0') ;
+                const month =   String(d.getMonth() + 1).padStart(2, '0') ;
+                const year = d.getFullYear();
+                
+                const datePlace = data.time.split(' ')[0] ;
+                const timePlace = data.time.split(' ')[1] ;
+
+                if(`${day}:${month}:${year}` ===  datePlace
+                   && timePlace.split(':')[0] === hours && (
+                       Number(timePlace.split(':')[1]) > Number(minute) 
+                   )
+                ) {
+                    const timeAwait  = ( Number(timePlace.split(':')[1]) - Number(minute)) * 60 - new Date().getSeconds() ;
+                    console.log(timeAwait +" s  await for place bet");
+                    setTimeout( () => { placeBet(data); } , (timeAwait + 1) *1000);
+                } else {
+                    console.log(" 2s place bet for normal");
+                    setTimeout( () => { placeBet(data); } , 2*1000);
+                }
+            }
+        }
+    }).then( doc => {
+        console.log(doc);
+    });
 }
  
   
