@@ -29,7 +29,7 @@ export module WefinetController {
   export const saveOrUpdate  = (user: UserWefinex):  Promise<any> => {
     return new Promise( (resolve, _) => {
     AngularFirestore.collection(T_USER_DOCUMENT).doc(user.userName).get().then(rs => {
-          user.auto =  (rs.exists && rs.data().data) || false ;
+          user.auto =  (rs.exists && rs.data().auto) || false ;
          AngularFirestore.collection(T_USER_DOCUMENT).doc(user.userName).set(user).then(() => {
           resolve({...user});
          });

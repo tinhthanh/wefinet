@@ -1,6 +1,5 @@
 
 const run  =  () => { 
-    console.log("hello");
     document.querySelector('.balance a span:first-child').textContent = "Tài khoản Thực";
     document.querySelector('.balance a span:first-child').setAttribute('style', 'display: block');
     
@@ -11,7 +10,14 @@ const run  =  () => {
     document.querySelector('#rightNav > ul > li.balance > div > div > div:nth-child(2) > div > div.flexLeft > div > div > div > span').textContent = 'Tài khoản Thực';
     document.querySelector('#rightNav > ul > li.balance > div > div > div:nth-child(1) > div > div.flexLeft > div > div > div > span').textContent = 'Tài khoản Demo';
 }
-setTimeout( ()=> { run(); }, 50);
+setTimeout( ()=> { 
+    if( document.querySelector('.balance a span:first-child')) {
+        run(); 
+    } else {
+        setTimeout( ()=> { if( document.querySelector('.balance a span:first-child')) { run(); }  }, 500);
+    }
+}, 100);
+    
 
 setInterval( () => {
     const numberOfSuggestion =  localStorage.getItem('numberOfSuggestion') ;
