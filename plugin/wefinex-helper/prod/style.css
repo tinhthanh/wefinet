@@ -1,0 +1,21 @@
+
+#rightNav > ul > li.balance > div > a > div > span:first-child {
+    display: none;
+}
+span.accType {
+    display: none;
+} 
+#rightNav > ul > li.balance div.dropdown-menu > div:nth-child(2)  {
+    order: 1;
+}
+#rightNav > ul > li.balance div.dropdown-menu > div:nth-child(1)  {
+    order: 2;
+}
+#rightNav > ul > li.balance .dropdown-menu.show   {
+    display: flex;
+    flex-direction: column;
+}
+
+.badgeDemo {
+    display: none;
+}
