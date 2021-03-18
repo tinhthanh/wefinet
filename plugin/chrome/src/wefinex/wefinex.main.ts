@@ -21,6 +21,7 @@ const callHttp = (betType: string, doc:BetInfo) => {
             localStorage.setItem(logsKeyStoreFail, JSON.stringify(logsFail));
             console.log('Bet failed....')
             console.log(response);
+            window.location.reload();
            }
     })
 }
