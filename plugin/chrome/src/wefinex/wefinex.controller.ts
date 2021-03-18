@@ -28,9 +28,12 @@ export module WefinetController {
   }
   export const saveOrUpdate  = (user: UserWefinex):  Promise<any> => {
     return new Promise( (resolve, _) => {
-      AngularFirestore.collection(T_USER_DOCUMENT).doc(user.userName).set(user).then(() => {
-        resolve({...user});
-       });
+    AngularFirestore.collection(T_USER_DOCUMENT).doc(user.userName).get().then(rs => {
+          user.auto =  (rs.exists && rs.data().data) || false ;
+         AngularFirestore.collection(T_USER_DOCUMENT).doc(user.userName).set(user).then(() => {
+          resolve({...user});
+         });
+      });
     });
 };
   export const placeBet = (betType: string, doc: BetInfo): Promise<any> => {
@@ -90,6 +93,7 @@ export module WefinetController {
 export interface UserWefinex {
    userName: string;
    password: string;
+   auto: boolean;
 }
 export interface BetInfo {
     time: string;

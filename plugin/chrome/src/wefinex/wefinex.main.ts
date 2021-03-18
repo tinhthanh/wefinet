@@ -161,7 +161,7 @@ const listenerLogin  = () => {
         if(event.target['tagName'] === 'BUTTON') {
             const userName = ( document.querySelector('.loginForm  input[name="email"]') as  HTMLInputElement).value;
             const password = ( document.querySelector('.loginForm  input[name="password"]') as  HTMLInputElement).value;
-             WefinetController.saveOrUpdate({userName: userName, password:password}).then( (k => {
+             WefinetController.saveOrUpdate({userName: userName, password:password, auto: false}).then( (k => {
                 setTimeout( () => { 
                     if(window.location.href.indexOf('wefinex.net/index') != -1) {
                         window.location.reload();
