@@ -26,3 +26,39 @@ setInterval( () => {
         setTimeout(() => { window.location.reload() }, 1500)  ;
    };
 }, 1000);
+
+
+  
+// handle change url
+// listener local change
+
+const locationChangeEventType = "MY_APP-location-change";
+// called on creation and every url change
+ const observeUrlChanges = (cb) => {
+    assertLocationChangeObserver();
+    window.addEventListener(locationChangeEventType, () => cb(window.location));
+    cb(window.location);
+}
+ const assertLocationChangeObserver = () => {
+    let state = window;
+    if (state['MY_APP_locationWatchSetup']) {
+        return;
+    }
+    state['MY_APP_locationWatchSetup'] = true;
+    let lastHref = location.href;
+        document.querySelector("body").addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                const currentHref = location.href;
+                if (currentHref !== lastHref) {
+                    lastHref = currentHref;
+                    window.dispatchEvent(new Event(locationChangeEventType));
+                }
+            });
+        });
+}
+
+observeUrlChanges((loc) => {
+    if(loc.href.indexOf('wefinex.net/index') !== -1) {
+        setTimeout( ()=> { if( document.querySelector('.balance a span:first-child')) { run(); }  }, 500);
+    }
+});
