@@ -6,7 +6,7 @@ dist
 # dependencies
 node_modules
 prod/src
-wefinex/src
+
 # IDEs and editors
 /.idea
 .project
