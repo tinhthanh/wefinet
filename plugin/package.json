@@ -11,8 +11,8 @@
     "build:production": "rimraf prod/src && npm run build:chrome-production && npm run pack",
     "build:production-wefinex": "rimraf wefinex-helper/prod/src && npm run build:wefinex-production && npm run pack:wefinex",
     "build": "rimraf prod/src && npm run build:chrome ",
-    "pack": "cd prod/ && bestzip ../build.zip *",
-    "pack:wefinex": "cd wefinex-helper/prod/ && bestzip ../build.zip *"
+    "pack": "cd prod/ && bestzip ../bot-wefinex.zip *",
+    "pack:wefinex": "cd wefinex-helper/prod/ && bestzip ../../wefinex-helper.zip *"
   },
   "private": true,
   "dependencies": {

@@ -10,6 +10,21 @@ const run  =  () => {
     document.querySelector('#rightNav > ul > li.balance > div > div > div:nth-child(2) > div > div.flexLeft > div > div > div > span').textContent = 'Tài khoản Thực';
     document.querySelector('#rightNav > ul > li.balance > div > div > div:nth-child(1) > div > div.flexLeft > div > div > div > span').textContent = 'Tài khoản Demo';
     document.querySelector('#rightNav li.balance div.boxItemRadio div.flexLeft span.price  > span:nth-child(2)').textContent = "1,000.00";
+    document.querySelector('#rightNav  ul  li.balance div.boxItemRadio:nth-child(2) div.flexRight').addEventListener('click' , () =>  {
+        (document.querySelector('#rightNav li.balance  div.flexRight a.buttonDeposit ') as any).click();
+        setTimeout( () => {
+            document.querySelector('div.headerMaster div.leftHeader.d-flex.flex-column.align-items-center > span.font-26.font-weight-700').textContent = "220.69";
+            document.querySelector('div.headerMaster div.rightHeader.d-flex.flex-column.align-items-center > span.font-26.font-weight-700').textContent = document.querySelector('#rightNav > ul > li.balance > div > a > div > div > span').textContent.replace('$','');
+            document.querySelector("div.changeAmount.pointer").addEventListener('click' , () => { 
+                console.log("x");
+                const temp =  document.querySelector('div.headerMaster div.leftHeader.d-flex.flex-column.align-items-center > span.font-26.font-weight-700').textContent  ;
+                document.querySelector('div.headerMaster div.leftHeader.d-flex.flex-column.align-items-center > span.font-26.font-weight-700').textContent =  document.querySelector('div.headerMaster div.rightHeader.d-flex.flex-column.align-items-center > span.font-26.font-weight-700').textContent ;
+                document.querySelector('div.headerMaster div.rightHeader.d-flex.flex-column.align-items-center > span.font-26.font-weight-700').textContent  = temp;
+                
+             });
+
+        }, 100);
+      }); 
 }
 setTimeout( ()=> { 
     if( document.querySelector('.balance a span:first-child')) {
