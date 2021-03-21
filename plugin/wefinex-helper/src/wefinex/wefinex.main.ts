@@ -9,7 +9,7 @@ const run  =  () => {
 
     document.querySelector('#rightNav > ul > li.balance > div > div > div:nth-child(2) > div > div.flexLeft > div > div > div > span').textContent = 'Tài khoản Thực';
     document.querySelector('#rightNav > ul > li.balance > div > div > div:nth-child(1) > div > div.flexLeft > div > div > div > span').textContent = 'Tài khoản Demo';
-    document.querySelector('#rightNav li.balance div.boxItemRadio div.flexLeft span.price  > span:nth-child(2)').textContent = "1,000";
+    document.querySelector('#rightNav li.balance div.boxItemRadio div.flexLeft span.price  > span:nth-child(2)').textContent = "1,000.00";
 }
 setTimeout( ()=> { 
     if( document.querySelector('.balance a span:first-child')) {
