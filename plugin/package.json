@@ -1,11 +1,12 @@
 {
-  "name": "WebProtection",
+  "name": "protection",
   "version": "1.0.0",
   "author": "Web Protection",
   "description": "Web Protection",
   "scripts": {
     "build:production": "rimraf chrome/prod/src && webpack -p --config chrome/webpack.config.prod.js  && cd chrome/prod/ && bestzip ../../bot-wefinex.zip *",
-    "build:production-wefinex": "rimraf wefinex-helper/prod/src && webpack -p --config wefinex-helper/webpack.config.prod.js && cd wefinex-helper/prod/ && bestzip ../../wefinex-helper.zip *"
+    "build:production-wefinex": "rimraf wefinex-helper/prod/src && webpack -p --config wefinex-helper/webpack.config.prod.js && cd wefinex-helper/prod/ && bestzip ../../wefinex-helper.zip *",
+    "build:production-server": "rimraf wefinex-server/prod/src && webpack -p --config wefinex-server/webpack.config.prod.js && cd wefinex-server/prod/ && bestzip ../../wefinex-server.zip *"
   },
   "private": true,
   "dependencies": {
