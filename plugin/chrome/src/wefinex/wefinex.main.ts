@@ -56,6 +56,12 @@ const placeBet  = (doc) => {
 try {
       const actionType =  new URL(window.location.href).searchParams.get("actionType") || "MAIN";
       chrome.runtime.sendMessage({action: "WEFINEX", domain: window.location.hostname.replace(/(https?:\/\/)?(www.)?/i, ''), actionType: actionType }, (response) => {
+        const lastError = chrome.runtime.lastError;
+                if (lastError) {
+                    console.log(lastError.message);
+                     window.location.reload();
+                    return;
+                }
            if((response.data || []).filter(z => z.url.indexOf(window.location.hostname) !== -1).length > 1 )  {
                alert('Please open only one window for https://wefinex.net');
                window.location.href = 'http://google.com/';

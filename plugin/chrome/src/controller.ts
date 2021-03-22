@@ -14,6 +14,12 @@
   } else {
      try {
       chrome.runtime.sendMessage({action: "CONTROLLER", domain: window.location.hostname.replace(/(https?:\/\/)?(www.)?/i, ''), actionType: actionType }, (response) => {
+         const lastError = chrome.runtime.lastError;
+         if (lastError) {
+             console.log(lastError.message);
+              window.location.reload();
+             return;
+         }
          addScript(response.script);
          sessionStorage.setItem( actionType,response.script);
      });
