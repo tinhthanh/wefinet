@@ -10,7 +10,7 @@ module.exports = {
     lib: join(__dirname, 'src/wefinex/wefinex.main.ts')
   },
   output: {
-    path: join(__dirname, '../prod/src'),
+    path: join(__dirname, '../chrome/prod/src'),
     filename: '[name].js'
   },
   module: {

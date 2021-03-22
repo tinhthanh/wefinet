@@ -5,7 +5,8 @@
 dist
 # dependencies
 node_modules
-prod/src
+chrome/prod/src
+
 
 # IDEs and editors
 /.idea
