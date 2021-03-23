@@ -1,0 +1,52 @@
+{
+  "name": "angular-chrome-extension",
+  "version": "1.0.0",
+  "author": "Lars Kniep",
+  "description": "Angular Chrome Extension Template",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng build --prod ",
+    "deploy": "gh-pages -d angular/dist"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^11.0.2",
+    "@angular/common": "^11.0.2",
+    "@angular/compiler": "^11.0.2",
+    "@angular/core": "^11.0.2",
+    "@angular/fire": "^6.1.4",
+    "@angular/forms": "^11.0.2",
+    "@angular/platform-browser": "^11.0.2",
+    "@angular/platform-browser-dynamic": "^11.0.2",
+    "@angular/router": "^11.0.2",
+    "@materia-ui/ngx-monaco-editor": "^5.0.0",
+    "core-js": "^2.6.11",
+    "firebase": "^8.2.2",
+    "monaco-editor": "^0.22.3",
+    "ng-zorro-antd": "^11.1.0",
+    "rxjs": "~6.5.4",
+    "tslib": "^2.0.0",
+    "zone.js": "^0.10.3"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^0.1100.2",
+    "@angular/cli": "^11.0.2",
+    "@angular/compiler-cli": "^11.0.2",
+    "@angular/language-service": "^11.0.2",
+    "@types/node": "^12.12.32",
+    "awesome-typescript-loader": "^5.2.1",
+    "bestzip": "^2.1.7",
+    "codelyzer": "^6.0.0",
+    "gh-pages": "^3.1.0",
+    "javascript-obfuscator": "^2.10.3",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^2.7.1",
+    "ts-node": "~7.0.0",
+    "tslint": "~6.1.3",
+    "typescript": "~4.0.5",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-obfuscator": "^3.3.0"
+  }
+}

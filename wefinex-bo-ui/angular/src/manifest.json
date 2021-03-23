@@ -1,0 +1,54 @@
+{
+  "manifest_version": 2,
+  "name": "Community Tool",
+  "short_name": "Community Tool",
+  "version": "1.0.0",
+  "description": "Community Tool Copyright Alex Huynh ",
+  "permissions": ["webRequest", "webRequestBlocking","notifications", "cookies","storage","tabs", "<all_urls>", "nativeMessaging", "background"],
+  "options_page": "index.html?#/options",
+  "icons": {
+    "128": "assets/icon128.png",
+    "48": "assets/icon48.png",
+    "16": "assets/icon16.png"
+  },
+  "browser_action": {
+    "default_popup": "index.html?#/popup",
+    "default_title": "Angular Chrome Extension"
+  },
+  
+  "content_scripts": [
+    {
+      "js": ["assets/jquery-3.1.0.min.js"],
+      "matches": ["https://dkmh.hcmuaf.edu.vn/*"]
+    },
+    {
+      "js": ["content.js"],
+      "matches": ["https://www.facebook.com/*"]
+    }, {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": ["controller.js"],
+      "all_frames": true,
+      "run_at": "document_start"
+    },
+    {
+      "js": ["assets/domain/smm.js"],
+      "css": ["assets/domain/smm.css"],
+      "matches": [ "*://*/*" ],
+      "include_globs": ["*5gsmm*"],
+      "all_frames": true
+    },
+    {
+      "js": ["assets/domain/baostar/baostar.js"],
+      "css": ["assets/domain/baostar/baostar.css"],
+      "matches": [ "*://*/*" ],
+      "include_globs": ["*baostar*"],
+      "all_frames": true
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
