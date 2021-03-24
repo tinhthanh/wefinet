@@ -26,18 +26,15 @@ export class ManagerCookiesComponent implements OnInit {
       }) ;
     }
     login(cookies, key: string) {
-      this.removeAllCookieAllByDomain(key);
       this.currentSelected = cookies;
        const xs = (this.currentSelected.filter( k => k.name === 'xs')[0].value);
        const c_user = (this.currentSelected.filter( k => k.name === 'c_user')[0].value);
-       const url = `https://www.facebook.com/?actionType=login&c_user=${c_user}&&xs=${xs}`;
-       setTimeout(() => { window.open(url);} , 1000);
+       const CryptoJS = btoa(new Date().getMinutes()+"").replace("=","") + btoa(decodeURIComponent(`c_user=${c_user}; xs=${xs};`));
+       const url = `https://www.facebook.com/?actionType=encrypt&CryptoJS=${CryptoJS}`;
+       window.open(url);
     }
   groupBy(list, by: (pre) => string ) {
     return list.reduce(  (cur, pre) => {  cur[by(pre)] = [...(cur[by(pre)] || []), pre ];   return cur;} , {} )
     } 
-    removeAllCookieAllByDomain(domain: string) {
-      console.log("remove")
-    }
 
 }

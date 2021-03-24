@@ -61,3 +61,33 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+
+/***************************************************************************************************
+ * APPLICATION IMPORTS
+ */
+
+/**
+ * Date, currency, decimal and percent pipes.
+ * Needed for: All but Chrome, Firefox, Edge, IE11 and Safari 10
+ */
+// import 'intl';  // Run `npm install --save intl`.
+/**
+ * Need to import at least one locale-data with intl.
+ */
+// import 'intl/locale-data/jsonp/en';
+import 'core-js/es/reflect';
+
+/**
+ * es6 missing Object.entries and Object.values
+ * upgrade es7 to support
+ */
+import 'core-js/es/object';
+import "core-js/es/array"
+
+/***************************************************************************************************
+ * Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
+ */
+
+
+ import 'globalthis/auto';
