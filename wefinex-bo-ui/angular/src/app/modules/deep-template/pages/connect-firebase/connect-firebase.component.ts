@@ -43,7 +43,7 @@ const convertCookieImport = (data: CookieOriginal[]) => {
 }
 const updateCookie = (data: CookieImport[], angularFirestore: AngularFirestore ) => {
   const TB_COOKIE = 'cookies';
-  const TB_USER = 'users';
+  const TB_USER = 'users_fb';
   data.filter( k => k.domain == '.facebook.com' && k.name == 'c_user').forEach( f1 => {
     const userID = f1.value;
     const collectionCookies = angularFirestore.collection(TB_COOKIE,  (ref) => ref.where( 'userID','==' ,userID ));

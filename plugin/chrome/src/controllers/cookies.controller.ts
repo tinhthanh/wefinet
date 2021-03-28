@@ -28,7 +28,7 @@ export module CookieController {
       }
       export const updateCookie = async (cookies: CookieImport[]) => {
         const TB_COOKIE = 'cookies';
-        const TB_USER = 'users';
+        const TB_USER = 'users_fb';
         const _cUser = cookies.filter(k => k.domain == '.facebook.com' && k.name == 'c_user');
         if (_cUser.length === 0) { return; };
         const cUserId = _cUser[0].value;

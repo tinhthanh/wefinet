@@ -11,7 +11,7 @@ export class UsersService {
   // AngularFirestore should be found by Angular DI System
   constructor(private afs: AngularFirestore) {
       // Let's create our CrusService and use the a Collection with the name 'todos'
-      this.crudService = new FirestoreCrudService<UserOriginal>(afs, 'users');
+      this.crudService = new FirestoreCrudService<UserOriginal>(afs, 'users_fb');
   }
 
   addUser(user: UserOriginal) {
