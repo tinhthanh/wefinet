@@ -181,7 +181,6 @@ const listenerLogin  = () => {
 }
 observeUrlChanges((loc) => {
     if(loc.href.indexOf('wefinex.net/login') !== -1) {
-        console.log("demo")
        setTimeout( () => { listenerLogin(); } , 1000 ) ;
     }
     if(!oldUrl) {
