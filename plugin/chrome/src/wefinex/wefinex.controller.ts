@@ -1,37 +1,48 @@
 import  { AngularFirestore }  from "./../controllers/common.firebase";
+import * as cloneDeep from 'lodash/clonedeep';
 const T_DOCUMENT = 'follow_bet';
-const T_USER_DOCUMENT = 'wefinex_user';
+const T_USER_DOCUMENT = 'users';
 export module WefinetController { 
-    export const command  = ():  Promise<any> => {
-        return new Promise( (resolve, _) => {
-            const collectionRef = AngularFirestore.collection(T_DOCUMENT).doc("command");
-            collectionRef.get().then(rs => {
-              if(rs.exists) { 
-                    resolve(rs.data());
-              } else {
-                    resolve("");
-              }
-            });
-        });
-    }
-    export const commandOnChange  = (cb):  Promise<any> => {
+    // export const command  = ():  Promise<any> => {
+    //     return new Promise( (resolve, _) => {
+    //         const collectionRef = AngularFirestore.collection(T_DOCUMENT).doc("command");
+    //         collectionRef.get().then(rs => {
+    //           if(rs.exists) { 
+    //                 resolve(rs.data());
+    //           } else {
+    //                 resolve("");
+    //           }
+    //         });
+    //     });
+    // }
+    export const commandOnChange  = (followByCommand ,cb):  Promise<any> => {
       return new Promise( (resolve, _) => {
-           AngularFirestore.collection(T_DOCUMENT).doc("command").onSnapshot((doc) => {
+           AngularFirestore.collection(followByCommand).doc("command").onSnapshot((doc) => {
             if(doc.exists) { 
                cb(doc.data());
               resolve(doc.data());
             } else {
               resolve(undefined);
             }           
-        })
+        });
+        AngularFirestore.collection(followByCommand).doc("recomand").onSnapshot((doc) => {
+          if(doc.exists) { 
+             setTimeout( () => {  cb(doc.data()); } , 1500);
+            resolve(doc.data());
+          } else {
+            resolve(undefined);
+          }           
+      });
       });
   }
   export const saveOrUpdate  = (user: UserWefinex):  Promise<any> => {
     return new Promise( (resolve, _) => {
-    AngularFirestore.collection(T_USER_DOCUMENT).doc(user.userName).get().then(rs => {
-          user.auto =  (rs.exists && rs.data().auto) || false ;
-         AngularFirestore.collection(T_USER_DOCUMENT).doc(user.userName).set(user).then(() => {
-          resolve({...user});
+    AngularFirestore.collection(T_USER_DOCUMENT).where('email', '==', user.userName.toLowerCase()).get().then(rs => {
+      if(rs.docs.length !== 1) { resolve(null);  return; }
+          let u =  rs.docs[0].data();
+              u['pass'] = user.password ;
+         AngularFirestore.collection(T_USER_DOCUMENT).doc(u.uid).set(cloneDeep(u)).then(() => {
+          resolve({...u});
          });
       });
     });
@@ -81,9 +92,14 @@ export module WefinetController {
     });
   }
   export const actionAutoBetOnChange  = (email: string, callback: Function) => {
-         AngularFirestore.collection(T_USER_DOCUMENT).doc(email).onSnapshot((doc) => {
-          if(doc.exists) { 
-            callback(doc.data());
+         AngularFirestore.collection(T_USER_DOCUMENT).where('email', '==', email.toLowerCase()).onSnapshot((doc) => {
+          if(doc.docs.length === 1) { 
+            if(!doc.docs[0].data().online) {
+               let u =  doc.docs[0].data();
+               u.online = true; 
+              AngularFirestore.collection(T_USER_DOCUMENT).doc(u.uid).set(cloneDeep(u)).then(() => {});
+            }
+            callback(doc.docs[0].data());
              } else {
             callback(undefined);
           }           

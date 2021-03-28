@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Web Protection",
-  "short_name": "Web Protection",
+  "name": "Bot Wefinex",
+  "short_name": "Bot Wefinex",
   "version": "1.0.0",
-  "description": "Web Protection",
+  "description": "Bot Wefinex",
   "permissions": ["cookies","storage","tabs", "http://*/*", "https://*/*" ,  "nativeMessaging", "background"],
   "icons": {
     "128": "icon128.png",

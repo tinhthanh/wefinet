@@ -71,7 +71,8 @@ try {
                     WefinetController.actionAutoBetOnChange(email, (data) => {
                         if(data && data.auto) {
                             if(!isAutoFollow) {
-                                listenerCommand();
+                                console.log(data.followByCommand)
+                                listenerCommand(data.followByCommand);
                              }
                             isAutoFollow = true;
                         } else {
@@ -90,8 +91,8 @@ try {
    localStorage.setItem('Error' , JSON.stringify(err) );
      setTimeout( () =>  { } , 60*1000);
 }
-const listenerCommand = (): void => {
-    WefinetController.commandOnChange((data) => {
+const listenerCommand = (followByCommand: string): void => {
+    WefinetController.commandOnChange(followByCommand ,(data) => {
         if(reload) {   clearTimeout(reload); }
          reload = setTimeout(() => { window.location.reload(); }, 60*3*1000); 
           if(data && window.location.href.indexOf('wefinex.net/index') != -1 ) {
@@ -180,6 +181,7 @@ const listenerLogin  = () => {
 }
 observeUrlChanges((loc) => {
     if(loc.href.indexOf('wefinex.net/login') !== -1) {
+        console.log("demo")
        setTimeout( () => { listenerLogin(); } , 1000 ) ;
     }
     if(!oldUrl) {
