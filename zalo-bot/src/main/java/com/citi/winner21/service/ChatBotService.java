@@ -168,7 +168,7 @@ public class ChatBotService {
                         Thread.sleep(1*1000);
                        this.zaloService.saveQR(driver.findElement(By.cssSelector(".qrcode img")).getAttribute("src"));
                         Thread.sleep(60*1000);
-                        this.zaloService.saveQR("");
+//                        this.zaloService.saveQR("");
                         List<WebElement> gEl = driver.findElements(By.cssSelector("input#contact-search-input"));
                         logger.log(Level.INFO, "ChatBotService -> " + gEl.size());
                         gEl.forEach( z -> {
