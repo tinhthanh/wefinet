@@ -24,6 +24,7 @@ export class HighlightPageComponent implements OnInit {
       z.lastUpdate = new Date();
       this.zaloBotService.addUser(z, z.id).then( z => {
         console.log(z);
+        alert("Xui lòng đợi vài giây...");
       });
     });
   }

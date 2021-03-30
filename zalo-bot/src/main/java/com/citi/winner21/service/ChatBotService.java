@@ -17,12 +17,10 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static java.util.concurrent.ThreadLocalRandom.*;
 @DependsOn("FirebaseInitialization")
 @Service
 public class ChatBotService {
@@ -61,6 +59,16 @@ public class ChatBotService {
         zaloService.listenerCommand(eventListener);
     }
     public void listenerComamdTrade() {
+        try {
+            Thread.sleep(3*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        WebElement chatElRun = driver.findElement(By.cssSelector("#richInput"));
+        chatElRun.clear();
+        chatElRun.sendKeys("Bot run ......");
+        chatElRun.sendKeys(Keys.ENTER);
+        chatElRun.clear();
         EventListener<QuerySnapshot> eventListener = (documentSnapshot, e) -> {
             List<WefinexCommand> temp = documentSnapshot.toObjects(WefinexCommand.class);
             logger.log(Level.INFO, "ChatBotService -> Change {0}, ", new Object[]{temp.toString()});
