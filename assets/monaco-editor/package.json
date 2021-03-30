@@ -2,7 +2,7 @@
   "_args": [
     [
       "monaco-editor@0.22.3",
-      "C:\\Users\\Administrator\\Desktop\\docker\\auto\\wefinex-bo-ui"
+      "C:\\Users\\alex.huynh\\Desktop\\Bamboo\\template\\github\\food-nlu\\wefinet\\wefinex-bo-ui"
     ]
   ],
   "_from": "monaco-editor@0.22.3",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/monaco-editor/-/monaco-editor-0.22.3.tgz",
   "_spec": "0.22.3",
-  "_where": "C:\\Users\\Administrator\\Desktop\\docker\\auto\\wefinex-bo-ui",
+  "_where": "C:\\Users\\alex.huynh\\Desktop\\Bamboo\\template\\github\\food-nlu\\wefinet\\wefinex-bo-ui",
   "author": {
     "name": "Microsoft Corporation"
   },
