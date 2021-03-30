@@ -29,6 +29,7 @@ import * as AllIcons from '@ant-design/icons-angular/icons';
 import { IconDefinition } from '@ant-design/icons-angular';
 import { MDomainService } from './services/manager-script/m-domain.service';
 import { MScriptService } from './services/manager-script/m-script.service';
+import { ZaloBotService } from './services/zalo-bot.service';
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
 };
@@ -54,6 +55,6 @@ registerLocaleData(en);
     MonacoEditorModule,
     NgZorroAntdModule
   ],
-  providers: [ MDomainService,MScriptService ,CookiesService, UsersService, { provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons }]
+  providers: [ MDomainService,MScriptService ,CookiesService, UsersService, ZaloBotService,{ provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons }]
 })
 export class DeepTemplateModule { }

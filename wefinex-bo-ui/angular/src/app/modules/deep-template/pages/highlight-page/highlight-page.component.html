@@ -1,1 +1,7 @@
-<app-dynamic-table [propsArray]="propsArray" [data]="data" ></app-dynamic-table>
+<button (click)="relogin()" nz-button nzType="primary">Check login</button>
+<ng-container *ngIf="zaloEntity && zaloEntity.qr" >
+   <br>
+   <img src="{{zaloEntity.qr}}" />
+   <br>
+   QR CODE đăng nhập lúc: {{(zaloEntity.lastUpdate.seconds  * 1000) | date:'yyyy/MM/dd h:mm:ss a'}}
+</ng-container>
