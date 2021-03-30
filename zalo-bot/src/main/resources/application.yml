@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: zalo-bot
+  profiles:
+    active: composite
+  datasource:
+    url: "jdbc:mysql://${DB_HOST:192.168.16.140}:${DB_PORT:3306}/${DB_NAME:tyler}?useSSL=false&useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true"
+    username: "${DB_USERNAME:devteam}"
+    password: "${DB_PASSWORD:dev@123#}"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 5
+  output:
+    ansi:
+      enabled: NEVER
+
+server:
+  servlet:
+    contextPath: /zalo-bot
+  port: 9191
+  compression:
+    enabled: true
+    min-response-size: 512
+logging:
+  file: logs/zalo-bot.log
+  logback:
+    rollingpolicy:
+      max-history: 2
+
+winner21:
+  home: "${WINNER21_HOME:https://www.winner21.com}"
+
+patch-race-chart-url: "${PATCH_RACE_CHART_URL:https://test.beatus88.com/citi-pro-gateway/patch/race/chart/}"
+
+mattermost-url : "${MATTERMOST_URL:https://chat.pal.net.vn/hooks/ymp5na9tu785pr4x79xurnt3ea}"
+
+max-count-msg : "${MAX_COUNT_MSG:15}"
+
+should-forward-gateway : "${SHOULD_FORWARD_GATEWAY:false}"
+
+forward-gateway-url : "${FORWARD_GATEWAY_URL:https://demo.beatus88.com/zalo-bot/}"

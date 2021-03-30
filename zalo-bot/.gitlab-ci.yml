@@ -1,0 +1,42 @@
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+stages:
+  - build
+  - pack
+  - qat
+
+build:jar:
+  stage: build
+  image: maven:3.6.2-jdk-8
+  script:
+    - mvn clean install
+  cache:
+    paths:
+      - .m2/repository/
+  artifacts:
+    name: $CI_COMMIT_REF_NAME
+    paths:
+      - target/*.jar
+    expire_in: 8 hrs
+
+pack:docker:
+  stage: pack
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  dependencies:
+    - build:jar
+
+deploy:qat:
+  stage: qat
+  only:
+    - develop
+  image: curlimages/curl
+  script:
+    - curl --location --request PUT 'https://rancher.pal.net.vn/v3/project/c-t9jlp:p-7k7h4/workloads/deployment:dev:zalo-bot' --header "Authorization:Bearer $RANCHER_ACCESS_TOKEN" --header 'Content-Type:application/json' --data-raw "{\"id\":\"deployment:dev:winner-21-gateway\",\"annotations\":{\"cattle.io/timestamp\":\"$(date +'%Y-%m-%dT%TZ')\"}}"
+  dependencies:
+    - pack:docker
