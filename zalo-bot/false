@@ -1,3 +1,2 @@
-1617073915011	geckodriver	INFO	Listening on 127.0.0.1:46137
+1617087879396	geckodriver	INFO	Listening on 127.0.0.1:2717
 console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
-console.log: WebExtensions: reset-default-search: No addons in our list are installed.

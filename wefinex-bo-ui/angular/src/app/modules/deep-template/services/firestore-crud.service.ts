@@ -2,11 +2,11 @@ import { Injectable, Query } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { take, map } from 'rxjs/operators';
-
+import * as cloneDeep from 'lodash/clonedeep';
 // We need a function that will turn our JS Objects into an Object
 // that Firestore can work with
 function firebaseSerialize<T>(object: T) {
-    return JSON.parse(JSON.stringify(object));
+    return cloneDeep(object);
 }
 
 // We need a base Entity interface that our models will extend

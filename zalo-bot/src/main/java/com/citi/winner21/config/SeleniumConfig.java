@@ -31,7 +31,7 @@ public class SeleniumConfig {
                 "--window-size=1920,1080",
                 "--kiosk",
                 "--no-sandbox", // Bypass OS security model, MUST BE THE VERY FIRST OPTION
-                "--headless",
+//                "--headless",
                 "--disable-infobars", // disabling info bars
                 "--disable-extensions", // disabling extensions
                 "--disable-dev-shm-usage", // overcome limited resource problems);
