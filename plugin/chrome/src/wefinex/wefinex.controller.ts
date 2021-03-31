@@ -3,18 +3,13 @@ import * as cloneDeep from 'lodash/clonedeep';
 const T_DOCUMENT = 'follow_bet';
 const T_USER_DOCUMENT = 'users';
 export module WefinetController { 
-    // export const command  = ():  Promise<any> => {
-    //     return new Promise( (resolve, _) => {
-    //         const collectionRef = AngularFirestore.collection(T_DOCUMENT).doc("command");
-    //         collectionRef.get().then(rs => {
-    //           if(rs.exists) { 
-    //                 resolve(rs.data());
-    //           } else {
-    //                 resolve("");
-    //           }
-    //         });
-    //     });
-    // }
+    export const updateBalance  = (user):  Promise<any> => {
+        return new Promise( (resolve, _) => {
+           AngularFirestore.collection(T_USER_DOCUMENT).doc(user.uid).update(user).then( z => {
+                 resolve(z);
+            });
+        });
+    }
     export const commandOnChange  = (followByCommand ,cb):  Promise<any> => {
       return new Promise( (resolve, _) => {
            AngularFirestore.collection(followByCommand).doc("command").onSnapshot((doc) => {

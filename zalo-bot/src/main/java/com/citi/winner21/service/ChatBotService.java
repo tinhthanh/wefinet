@@ -60,15 +60,10 @@ public class ChatBotService {
     }
     public void listenerComamdTrade() {
         try {
-            Thread.sleep(3*1000);
+            Thread.sleep(2*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        WebElement chatElRun = driver.findElement(By.cssSelector("#richInput"));
-        chatElRun.clear();
-        chatElRun.sendKeys("Bot run ......");
-        chatElRun.sendKeys(Keys.ENTER);
-        chatElRun.clear();
         EventListener<QuerySnapshot> eventListener = (documentSnapshot, e) -> {
             List<WefinexCommand> temp = documentSnapshot.toObjects(WefinexCommand.class);
             logger.log(Level.INFO, "ChatBotService -> Change {0}, ", new Object[]{temp.toString()});
@@ -90,7 +85,7 @@ public class ChatBotService {
             }
             logger.log(Level.INFO, "ChatBotService -> Thang {0}, Thua {1}", new Object[]{countWin, countLose});
             String ms;
-            if (countWin >= 3) {
+            if (countWin >= 2) {
                 ms = "THẮNG " + countWin + " lần liên tiếp cơ hội đầu tư";
                 WebElement chatEl = driver.findElement(By.cssSelector("#richInput"));
                 chatEl.clear();
@@ -98,7 +93,7 @@ public class ChatBotService {
                 chatEl.sendKeys(Keys.ENTER);
                 chatEl.clear();
             }
-            if (countLose >= 3) {
+            if (countLose >= 2) {
                 ms = "THUA " + countLose + " lần liên tiếp [CẢNH BÁO]";
                 WebElement chatEl = driver.findElement(By.cssSelector("#richInput"));
                 chatEl.clear();
@@ -153,13 +148,12 @@ public class ChatBotService {
     public void doLogin() {
         try {
             driver.get("https://chat.zalo.me");
-            WebDriverWait wait = new WebDriverWait(driver, 30);
             Thread.sleep(1000);
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("app")));
             String url = driver.getCurrentUrl();
             if(url.startsWith("https://chat.zalo.me")) {
                 logger.log(Level.INFO, "ChatBotService -> is login!");
             } else {
+                Thread.sleep(1000);
                 if(url.contains("id.zalo.me")) {
                     List<WebElement> logoutEl = driver.findElements(By.cssSelector("div.bottom a[target='_blank']")).stream()
                             .filter( k -> k.getText().equals("Đăng xuất")).collect(Collectors.toList());
@@ -180,19 +174,15 @@ public class ChatBotService {
                         this.zaloService.saveQR("");
                         List<WebElement> gEl = driver.findElements(By.cssSelector("input#contact-search-input"));
                         logger.log(Level.INFO, "ChatBotService -> " + gEl.size());
-                        gEl.forEach( z -> {
-                            try {
+                        for( int i = 0 ; i <  gEl.size() ; i++) {
+                            WebElement z =   gEl.get(i) ;
                             Thread.sleep(3*100);
                             z.clear();
                             z.sendKeys("WEFINEX_BOT");
-                                Thread.sleep(3*100);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                            Thread.sleep(3*100);
                             z.sendKeys(Keys.ENTER);
                             this.listenerComamdTrade();
-
-                        });
+                        }
                     }
                 } else {
                     logger.log(Level.SEVERE, "ChatBotService -> cannot login with url: {0}" , new Object[]{url});

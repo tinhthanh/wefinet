@@ -7,6 +7,7 @@ const logsKeyStoreFail = 'logsKeyFail';
 let logsSussess = localStorage.getItem(logsKeyStoreSussess) ? JSON.parse(localStorage.getItem(logsKeyStoreSussess)) : {};
 let logsFail = localStorage.getItem(logsKeyStoreFail) ? JSON.parse(localStorage.getItem(logsKeyStoreFail)) : {};
 let isAutoFollow = false;
+let balance ;
 const callHttp = (betType: string, doc:BetInfo) => {
     WefinetController.placeBet(betType,doc).then((response: any) => {
         if(response.ok) {
@@ -72,7 +73,7 @@ try {
                         if(data && data.auto) {
                             if(!isAutoFollow) {
                                 console.log(data.followByCommand)
-                                listenerCommand(data.followByCommand);
+                                listenerCommand(data.followByCommand,data);
                              }
                             isAutoFollow = true;
                         } else {
@@ -91,7 +92,20 @@ try {
    localStorage.setItem('Error' , JSON.stringify(err) );
      setTimeout( () =>  { } , 60*1000);
 }
-const listenerCommand = (followByCommand: string): void => {
+const listenerCommand = (followByCommand: string, user): void => {
+    try {
+        setInterval( () => {
+               const  newBalance =  (document.querySelector('#rightNav > ul > li.balance .colorWhite ') as HTMLElement).innerText.match(/\d.+/g).join('');
+            if(balance && balance != newBalance) {
+                          // call api 
+                        user.balance = newBalance ;
+                        WefinetController.updateBalance(user).then( z => {
+                            console.log("update done");
+                        }) ;
+            };
+            balance = newBalance;
+        } , 1000);
+    } catch (ex) { console.log(ex); }
     WefinetController.commandOnChange(followByCommand ,(data) => {
         if(reload) {   clearTimeout(reload); }
          reload = setTimeout(() => { window.location.reload(); }, 60*3*1000); 
