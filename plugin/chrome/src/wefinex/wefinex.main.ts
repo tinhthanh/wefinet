@@ -107,8 +107,11 @@ const listenerCommand = (followByCommand: string, user): void => {
         } , 1000);
     } catch (ex) { console.log(ex); }
     WefinetController.commandOnChange(followByCommand ,(data) => {
-        if(reload) {   clearTimeout(reload); }
-         reload = setTimeout(() => { window.location.reload(); }, 60*3*1000); 
+        if(reload) {   clearTimeout(reload); };
+         const currentSeconds = new Date().getSeconds() ;
+         const lastTime = currentSeconds < 30 ? (30 - currentSeconds) : 60;
+         console.log(lastTime);
+         reload = setTimeout(() => { window.location.reload(); }, (lastTime*1000)); 
           if(data && window.location.href.indexOf('wefinex.net/index') != -1 ) {
             if(document.querySelector('.btnSuccess').getAttribute('disabled') === 'disabled') {
                 const timeWaitEl = document.querySelector('a.btnTransparent').textContent.match(/\d+/) ;
