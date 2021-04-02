@@ -57,7 +57,7 @@ public class InternalDataCrawlService {
 
     private final Gson gson = new Gson();
 
-    @Scheduled(fixedDelay = 30 * 60 * 1000)
+//    @Scheduled(fixedDelay = 30 * 60 * 1000)
     public void crawlDataInternalGateway() {
         if (shouldForwardGateway) {
             logger.log(Level.INFO, "DataCrawlService -> Forward Crawl Internal Gateway!");

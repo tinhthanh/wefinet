@@ -70,7 +70,7 @@ public class DataCrawlService {
         autoCrawlDataWinner21();
     }
 
-    @Scheduled(cron = "0 0 10 1/1 * ?", zone = Constants.SINGAPORE_ZONE_TIME)
+//    @Scheduled(cron = "0 0 10 1/1 * ?", zone = Constants.SINGAPORE_ZONE_TIME)
     public void autoCrawlDataWinner21() {
         if (shouldForwardGateway || Utils.checkTimeWinner21Maintenance()) {
             logger.log(Level.INFO, "DataCrawlService -> crawlRaceCardsUpcoming should forward gateway or closed for maintenance from 12AM to 3AM daily!");

@@ -112,7 +112,7 @@ const listenerCommand = (followByCommand: string, user): void => {
           if(data && window.location.href.indexOf('wefinex.net/index') != -1 ) {
             if(document.querySelector('.btnSuccess').getAttribute('disabled') === 'disabled') {
                 const timeWaitEl = document.querySelector('a.btnTransparent').textContent.match(/\d+/) ;
-                if(timeWaitEl && (new Date().getSeconds()) >= 30 ) {
+                if(timeWaitEl) {
                      const timeAwait =  Number(timeWaitEl[0]) ;
                      console.log("Chờ ..." + timeAwait + "s");
                       setTimeout( () => {  placeBet(data) } , (timeAwait + 1 )*1000);
