@@ -36,6 +36,12 @@ const saveResult = (data) => {
     }
 }
 const startServer = (): void => {
+    const currentSeconds = new Date().getSeconds() ;
+    let lastTime = currentSeconds < 30 ? (30 - currentSeconds) : 60;
+        lastTime = lastTime + 60;
+        console.log(lastTime);
+    reload = setTimeout(() => { window.location.reload(); }, (lastTime*1000)); 
+
   
     const collectData = () => {
         const minutes = new Date().getSeconds();
