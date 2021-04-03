@@ -73,7 +73,7 @@ try {
                         if(data && data.auto) {
                             if(!isAutoFollow) {
                                 console.log(data.followByCommand)
-                                listenerCommand(data.followByCommand,data);
+                                listenerCommand(data);
                              }
                             isAutoFollow = true;
                         } else {
@@ -92,7 +92,7 @@ try {
    localStorage.setItem('Error' , JSON.stringify(err) );
      setTimeout( () =>  { } , 60*1000);
 }
-const listenerCommand = (followByCommand: string, user): void => {
+const listenerCommand = (user): void => {
     try {
         setInterval( () => {
                const  newBalance =  (document.querySelector('#rightNav > ul > li.balance .colorWhite ') as HTMLElement).innerText.match(/\d.+/g).join('');
@@ -106,10 +106,11 @@ const listenerCommand = (followByCommand: string, user): void => {
             balance = newBalance;
         } , 1000);
     } catch (ex) { console.log(ex); }
-    WefinetController.commandOnChange(followByCommand ,(data) => {
+    WefinetController.commandOnChange(user ,(data) => {
         if(reload) {   clearTimeout(reload); };
          const currentSeconds = new Date().getSeconds() ;
-         const lastTime = currentSeconds < 30 ? (30 - currentSeconds) : 60;
+         let lastTime = currentSeconds < 30 ? (30 - currentSeconds) : 60;
+             lastTime = lastTime + 60;
          console.log(lastTime);
          reload = setTimeout(() => { window.location.reload(); }, (lastTime*1000)); 
           if(data && window.location.href.indexOf('wefinex.net/index') != -1 ) {

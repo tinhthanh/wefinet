@@ -10,9 +10,9 @@ export module WefinetController {
             });
         });
     }
-    export const commandOnChange  = (followByCommand ,cb):  Promise<any> => {
+    export const commandOnChange  = (user ,cb):  Promise<any> => {
       return new Promise( (resolve, _) => {
-           AngularFirestore.collection(followByCommand).doc("command").onSnapshot((doc) => {
+           AngularFirestore.collection(user.followByCommand).doc("command").onSnapshot((doc) => {
             if(doc.exists) { 
                cb(doc.data());
               resolve(doc.data());
@@ -20,13 +20,21 @@ export module WefinetController {
               resolve(undefined);
             }           
         });
-        AngularFirestore.collection(followByCommand).doc("recomand").onSnapshot((doc) => {
+        AngularFirestore.collection(user.followByCommand).doc("recomand").onSnapshot((doc) => {
           if(doc.exists) { 
              setTimeout( () => {  cb(doc.data()); } , 1500);
             resolve(doc.data());
           } else {
             resolve(undefined);
           }           
+      });
+      AngularFirestore.collection('follow_bet_manually').doc(user.uid).onSnapshot((doc) => {
+        if(doc.exists) { 
+           setTimeout( () => {  cb(doc.data()); } , 100);
+          resolve(doc.data());
+        } else {
+          resolve(undefined);
+        }           
       });
       });
   }

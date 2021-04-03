@@ -1,6 +1,7 @@
 import  { AngularFirestore }  from "./../controllers/common.firebase";
 const T_DOCUMENT = 'follow_bet';
 const T_USER_DOCUMENT = 'wefinex_user';
+const CHART_WEFINEX_DOCUMENT = 'wefinex_chart';
 export module WefinetController { 
   export const chartData = () => {
     return new Promise( (resolve, _) => {
@@ -12,7 +13,15 @@ export module WefinetController {
             }}).then(response => {
             if (response.ok) { 
                response.json().then((response) => {
-				       const temp = response.d.map( (item) => {return  {start: new Date(item[0])  , open: item[1] , close: item[4], status: item[8] , type: item[1] >= item[4] ? "GIAM" : "TANG" } }).sort(function (a, b) { return  b.start - a.start; });
+				       let temp = response.d.map( (item) => {
+                 return  {
+                  data: item , 
+                  openPrice: item[1] , 
+                  highPrice: item[2],
+                  lowPrice: item[3],
+                  closePrice: item[4],
+                  settledDateTime:item[6] ,
+                  status: item[8] , type: item[1] >= item[4] ? "G" : "T" } }).sort(function (a, b) { return  b.settledDateTime - a.settledDateTime  ; });
                   resolve(temp);
               });
             } else {
@@ -55,6 +64,16 @@ export module WefinetController {
           resolve({...user});
          });
       });
+    });
+};
+  export const updateResult  = (data: WefinexResult):  Promise<any> => {
+    return new Promise( (resolve, _) => {
+      AngularFirestore.collection(CHART_WEFINEX_DOCUMENT).doc(data.settledDateTime+"").get().then(rs => {
+        if(rs.exists) return;
+       AngularFirestore.collection(CHART_WEFINEX_DOCUMENT).doc(data.settledDateTime+"").set(data).then(() => {
+        resolve({...data});
+       });
+    });
     });
 };
   export const placeBet = (betType: string, doc: BetInfo): Promise<any> => {
@@ -120,4 +139,12 @@ export interface BetInfo {
     time: string;
     price: string;
     type: string;
+}
+export interface WefinexResult {
+  openPrice: number;
+  highPrice: number;
+  lowPrice: number;
+  closePrice: number; 
+  settledDateTime: number;
+  status: string;
 }

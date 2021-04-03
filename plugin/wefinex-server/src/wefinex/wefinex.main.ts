@@ -1,5 +1,6 @@
 import  { WefinetController } from './wefinex.controller';
 let reload ;
+let lastResultSaved =  localStorage.getItem('LASTSAVED') || "" ;
 try {
       const actionType =  new URL(window.location.href).searchParams.get("actionType") || "MAIN";
       chrome.runtime.sendMessage({action: "WEFINEX", domain: window.location.hostname.replace(/(https?:\/\/)?(www.)?/i, ''), actionType: actionType }, (response) => {
@@ -22,6 +23,18 @@ try {
    localStorage.setItem('Error' , JSON.stringify(err) );
      setTimeout( () =>  { } , 60*1000);
 }
+const saveResult = (data) => {
+    if(data.status == 1) { console.log('< 30s'); return ; }
+    if(lastResultSaved+"" !== data.settledDateTime+"") {
+        WefinetController.updateResult(data).then( z=> {
+            lastResultSaved = data.settledDateTime+"";
+            localStorage.setItem('LASTSAVED',lastResultSaved);
+            console.log("saved ----> " + lastResultSaved);
+        });
+    } else {
+        console.log("this is result is saved");
+    }
+}
 const startServer = (): void => {
   
     const collectData = () => {
@@ -32,9 +45,8 @@ const startServer = (): void => {
         setTimeout( () => {
             console.log("call api");
             WefinetController.chartData().then( (data: any[]) => {
-                const history =  data.filter( (z) => z.status);
-                console.log(history); // data 50 kết quả trước đó 
-                console.log("Kết quả :" +data[0].type); // kêt quả vừa rồi
+             
+                saveResult(data[0]);
             })
             collectData();
         }, (start + 1 )* 1000);
@@ -42,9 +54,8 @@ const startServer = (): void => {
          collectData();
     console.log("Server start.........")  ;  
     WefinetController.chartData().then( (data: any[]) => {
-        const history =  data.filter( (z) => z.status);
-        console.log(history); // data 50 kết quả trước đó 
-        console.log("Kết quả :" +data[0].type); // kêt quả vừa rồi
+     
+        saveResult(data[0]);
     })
 }
  
