@@ -107,6 +107,10 @@ const listenerCommand = (user): void => {
         } , 1000);
     } catch (ex) { console.log(ex); }
     WefinetController.commandOnChange(user ,(data) => {
+        if(Number(data.price) > Number(user.doubly)) {
+            console.log(Number(data.price) +' Vượt quá max bet setting '  + Number(user.doubly)) ;
+            return;
+        } 
         if(reload) {   clearTimeout(reload); };
          const currentSeconds = new Date().getSeconds() ;
          let lastTime = currentSeconds < 30 ? (30 - currentSeconds) : 60;
