@@ -100,7 +100,7 @@ export module WefinetController {
             if(!doc.docs[0].data().online) {
                let u =  doc.docs[0].data();
                u.online = true; 
-              AngularFirestore.collection(T_USER_DOCUMENT).doc(u.uid).set(cloneDeep(u)).then(() => {});
+              AngularFirestore.collection(T_USER_DOCUMENT).doc(u.uid).update({online: true}).then(() => {});
             }
             callback(doc.docs[0].data());
              } else {
