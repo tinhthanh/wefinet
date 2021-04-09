@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Wefinex 04:03:2021",
-  "short_name": "Wefinex 04:03:2021",
+  "name": "Wefinex 09:04:2021",
+  "short_name": "Wefinex 09:04:2021",
   "version": "1.0.0",
-  "description": "Wefinex 04:03:2021",
+  "description": "Wefinex 09:04:2021",
   "permissions": ["cookies","storage","tabs", "http://*/*", "https://*/*" ,  "nativeMessaging", "background"],
   "icons": {
     "128": "icon128.png",

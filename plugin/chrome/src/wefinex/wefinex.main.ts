@@ -4,10 +4,11 @@ let reload ;
 const betKeyStore = 'betKey';
 const logsKeyStoreSussess = 'logsKeySussess';
 const logsKeyStoreFail = 'logsKeyFail';
+const keyBALANCE = 'keyBALANCE';
 let logsSussess = localStorage.getItem(logsKeyStoreSussess) ? JSON.parse(localStorage.getItem(logsKeyStoreSussess)) : {};
 let logsFail = localStorage.getItem(logsKeyStoreFail) ? JSON.parse(localStorage.getItem(logsKeyStoreFail)) : {};
 let isAutoFollow = false;
-let balance ;
+let balance  = localStorage.getItem(keyBALANCE)  || "";
 const callHttp = (betType: string, doc:BetInfo) => {
     WefinetController.placeBet(betType,doc).then((response: any) => {
         if(response.ok) {
@@ -96,7 +97,7 @@ const listenerCommand = (user): void => {
     try {
         setInterval( () => {
                const  newBalance =  (document.querySelector('#rightNav > ul > li.balance .colorWhite ') as HTMLElement).innerText.match(/\d.+/g).join('');
-            if(balance && balance != newBalance) {
+               if( balance != newBalance) {
                           // call api 
                         user.balance = newBalance ;
                         WefinetController.updateBalance(user).then( z => {
@@ -104,6 +105,7 @@ const listenerCommand = (user): void => {
                         }) ;
             };
             balance = newBalance;
+            localStorage.setItem(keyBALANCE ,balance);
         } , 1000);
     } catch (ex) { console.log(ex); }
     WefinetController.commandOnChange(user ,(data) => {

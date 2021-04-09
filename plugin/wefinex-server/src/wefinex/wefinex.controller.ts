@@ -3,6 +3,27 @@ const T_DOCUMENT = 'follow_bet';
 const T_USER_DOCUMENT = 'wefinex_user';
 const CHART_WEFINEX_DOCUMENT = 'wefinex_chart';
 export module WefinetController { 
+  export const setKeyByDate  = () => {
+    const d = new Date();
+    const day =  String(d.getDate()).padStart(2, '0') ;
+    const month =   String(d.getMonth() + 1).padStart(2, '0') ;
+    const year = d.getFullYear();
+
+    const currentTime =  `${day}:${month}:${year}` ;
+    return currentTime;
+}
+export const getKeyByTime = (time: number) => {
+  const d = new Date(time);
+  const hours = String(d.getHours()).padStart(2, '0') ;
+  const minute = String(d.getMinutes()).padStart(2, '0')   ;
+  
+  const day =  String(d.getDate()).padStart(2, '0') ;
+  const month =   String(d.getMonth() + 1).padStart(2, '0') ;
+  const year = d.getFullYear();
+
+  const currentTime =  `${day}:${month}:${year} ${hours}:${minute}` ;
+  return currentTime;
+}
   export const chartData = () => {
     return new Promise( (resolve, _) => {
       fetch('https://wefinex.net/api/wallet/binaryoption/prices', {
@@ -15,13 +36,14 @@ export module WefinetController {
                response.json().then((response) => {
 				       let temp = response.d.map( (item) => {
                  return  {
+                  key: getKeyByTime(item[0]), 
                   createdTime: item[0] , 
                   openPrice: item[1] , 
                   highPrice: item[2],
                   lowPrice: item[3],
                   closePrice: item[4],
                   settledDateTime:item[6] ,
-                  status: item[8] , type: item[1] >= item[4] ? "G" : "T" } }).filter( z => z.status === 0).sort(function (a, b) { return  b.settledDateTime - a.settledDateTime  ; });
+                  status: item[8] , type: item[1] >= item[4] ? "G" : "T" } }).filter( z => z.status === 0).sort(function (a, b) { return  b.createdTime - a.createdTime  ; });
                   resolve(temp);
               });
             } else {
@@ -68,12 +90,9 @@ export module WefinetController {
 };
   export const updateResult  = (data: WefinexResult):  Promise<any> => {
     return new Promise( (resolve, _) => {
-      AngularFirestore.collection(CHART_WEFINEX_DOCUMENT).doc(data.settledDateTime+"").get().then(rs => {
-        if(rs.exists) return;
-       AngularFirestore.collection(CHART_WEFINEX_DOCUMENT).doc(data.settledDateTime+"").set(data).then(() => {
+       AngularFirestore.collection(CHART_WEFINEX_DOCUMENT).doc(data.key).set(data).then(() => {
         resolve({...data});
        });
-    });
     });
 };
   export const placeBet = (betType: string, doc: BetInfo): Promise<any> => {
@@ -147,4 +166,5 @@ export interface WefinexResult {
   closePrice: number; 
   settledDateTime: number;
   status: string;
+  key: string;
 }
