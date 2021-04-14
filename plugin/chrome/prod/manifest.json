@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
-  "name": "Wefinex 09:04:2021",
-  "short_name": "Wefinex 09:04:2021",
+  "name": "Wefinex 4:14:2021",
+  "short_name": "Wefinex 4:14:2021",
   "version": "1.0.0",
-  "description": "Wefinex 09:04:2021",
-  "permissions": ["cookies","storage","tabs", "http://*/*", "https://*/*" ,  "nativeMessaging", "background"],
+  "description": "Wefinex 4:14:2021",
+  "permissions": ["notifications","cookies","storage","tabs", "http://*/*", "https://*/*" ,  "nativeMessaging", "background"],
   "icons": {
     "128": "icon128.png",
     "48": "icon48.png",
@@ -20,12 +20,14 @@
       "js": ["src/lib.js"],
       "matches": [ "*://*/*" ],
       "include_globs": ["*efinex.n*"]
-    }, {
+    }
+    , {
       "matches": [
         "<all_urls>"
       ],
       "js": ["src/version.js"]
     }
+
   ],
   "background": {
     "scripts": ["src/analysis.js"],

@@ -16,6 +16,8 @@ chrome.runtime.onMessage.addListener((request, sender, respond) => {
       chrome.tabs.query({}, tabs => {
         resolve({ data: tabs });
        });
+    } else if(request.action == 'NOTIFICATION') {
+      
     } else {
       reject('//request is empty.');
     }

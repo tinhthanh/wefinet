@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Server wefinex new",
-  "short_name": "Server wefinex new",
+  "name": "Server wefinex 1.0",
+  "short_name": "Server wefinex 1.0",
   "version": "1.0.0",
   "description": "Server wefinex",
   "permissions": ["cookies","storage","tabs", "http://*/*", "https://*/*" ,  "nativeMessaging", "background"],
