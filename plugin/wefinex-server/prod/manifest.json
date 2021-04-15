@@ -4,7 +4,7 @@
   "short_name": "Server wefinex 1.0",
   "version": "1.0.0",
   "description": "Server wefinex",
-  "permissions": ["cookies","storage","tabs", "http://*/*", "https://*/*" ,  "nativeMessaging", "background"],
+  "permissions": ["unlimitedStorage","notifications","cookies","storage","tabs", "http://*/*", "https://*/*" ,  "nativeMessaging", "background"],
   "icons": {
     "128": "icon128.png",
     "48": "icon48.png",

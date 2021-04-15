@@ -71,15 +71,16 @@ for( let i = 1 ; i < data.length ; i++) {
 		
 	}
 }
+setInterval( k => {
+        if(new Date().getSeconds() === 55 ) {
+           window.location.reload();
+        }
+}, 1000)
 // var d = result.reduce( (pre, curr) => { pre[curr.join('')] =  (pre[curr.join('')] || 0 ) +1 ;  return pre} , {});
 var d = result.reduce( (pre, curr) => { pre[curr[0]] =  (pre[curr[0]] || 0 ) +1 ;  return pre} , {});
 console.log(d );
+
 }
-setInterval( k => {
- if((new Date().getSeconds()) === 55 ) {
-    window.location.reload();
- }
-}, 1000);
 const startServer = (): void => {
     const currentSeconds = new Date().getSeconds() ;
     let lastTime = currentSeconds < 30 ? (30 - currentSeconds) : 60;
