@@ -32,6 +32,17 @@ const saveResult = (list) => {
             lastResultSaved[i.key] =  i ;
         });
     }
+    let couter = 0 ;
+    for(let i = 1 ; i < list.length ; i++ ) {
+        if(list[0].type === list[i].type ) {
+            couter++;
+        } else {
+            break;
+        }
+    }
+    if(couter >= 4) {
+        chrome.runtime.sendMessage({action: "NOTIFICATION", msg:  "Cơ hội đầu tư"}, (response) => {});
+    }
     list.forEach(el => {
         if(!lastResultSaved[el.key]) {
             const data  = el;
@@ -40,13 +51,53 @@ const saveResult = (list) => {
                 console.log(WefinetController.setKeyByDate());
                 localStorage.setItem(WefinetController.setKeyByDate(),JSON.stringify(lastResultSaved));
                 statistics(Object.values(lastResultSaved));
+                analysis();
                 console.log("saved ----> "  + data.key + " " + data.type + " " +  data.status) ;
                setTimeout(( ) => { window.location.reload(); } , 10*1000) 
             });
         }
     });
 }
+const analysis = (): void => {
+var time  = WefinetController.setKeyByDate();			  
+const data = Object.values(JSON.parse(localStorage.getItem(time))).filter((z: any) => z.key.startsWith(time)).sort(function (a: any, b: any) { return  b.createdTime - a.createdTime  ; });
+  let result = [];
+      let same: any = data[0];
+      let obj = {};
+      for( let i = 0 ; i < data.length; i++) {
+        const d: any = data[i] ;
+          if(d.type !== same.type) { 
+          if(result.length > 2){
+            const listKey = result.map(k => k.type).join('') ;
+            const key  = listKey.length + listKey[0] ;
+            obj[key]  = [...(obj[key] || [] ), result[0].key.split(' ')[1]]  ;
+          }
+          result = [];
+        }
+        result.push(d)
+        same = d;
+
+      }
+      if(result.length > 1){
+        const listKey = result.map(k => k.type).join('') ;
+        const key  = listKey.length + listKey[0] ;
+        obj[key]  =  [...(obj[key] || [] ), result[0].key.split(' ')[1]];
+      }
+      var temp1 = obj;
+      var list = Object.values(Object.keys(temp1).reduce( (pre , curr) => {  pre[curr.replace("T", "").replace("G", "")]  = { N:curr.match(/\d+/g)[0] , T : (temp1[curr.match(/\d+/g)[0] + "T"] ? temp1[curr.match(/\d+/g) + "T"].length : 0)  , G : (temp1[curr.match(/\d+/g)[0] + "G"] ? temp1[curr.match(/\d+/g) + "G"].length : 0) } ; return pre; } , {})).
+      sort((b1: any, b2: any) => Number(b1.name) - Number(b2.name) ) ;
+	  const chart = localStorage.getItem(`CHART-${WefinetController.setKeyByDate()}`) || '';
+      if(chart === JSON.stringify(list)) {
+          console.log('không change');
+      } else {
+        console.log('Change');
+        console.log(list);
+      }
+      localStorage.setItem(`CHART-${WefinetController.setKeyByDate()}`,JSON.stringify(list));
+				  
+}
 const statistics = (list): void => {
+
     const data = list.sort(function (a, b) { return  b.createdTime - a.createdTime  ; }).map( z => z.type);
     var result = [];
 for( let i = 1 ; i < data.length ; i++) {
@@ -71,16 +122,18 @@ for( let i = 1 ; i < data.length ; i++) {
 		
 	}
 }
-setInterval( k => {
-        if(new Date().getSeconds() === 55 ) {
-           window.location.reload();
-        }
-}, 1000)
 // var d = result.reduce( (pre, curr) => { pre[curr.join('')] =  (pre[curr.join('')] || 0 ) +1 ;  return pre} , {});
 var d = result.reduce( (pre, curr) => { pre[curr[0]] =  (pre[curr[0]] || 0 ) +1 ;  return pre} , {});
 console.log(d );
 
+
+
 }
+setInterval( k => {
+    if(new Date().getSeconds() === 55 ) {
+       window.location.reload();
+    }
+}, 1000)
 const startServer = (): void => {
     const currentSeconds = new Date().getSeconds() ;
     let lastTime = currentSeconds < 30 ? (30 - currentSeconds) : 60;

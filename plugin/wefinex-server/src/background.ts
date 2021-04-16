@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener((request, sender, respond) => {
         resolve({ data: tabs });
        });
     } else if(request.action == 'NOTIFICATION') {
-      
+      createNotify(request.msg);
     } else {
       reject('//request is empty.');
     }
@@ -25,3 +25,15 @@ chrome.runtime.onMessage.addListener((request, sender, respond) => {
   handler.then(message => respond(message)).catch(error => respond(error));
   return true;
 });
+const createNotify = (message: string) => {
+  chrome.notifications.create(
+    "wefinex-bot",
+    {
+      type: "basic",
+      iconUrl: "icon16.png",
+      title: "Server Wefinex",
+      message: message,
+    },
+     () =>  {}
+  );
+}
