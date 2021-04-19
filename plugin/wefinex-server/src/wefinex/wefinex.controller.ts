@@ -2,6 +2,7 @@ import  { AngularFirestore }  from "./../controllers/common.firebase";
 const T_DOCUMENT = 'follow_bet';
 const T_USER_DOCUMENT = 'wefinex_user';
 const CHART_WEFINEX_DOCUMENT = 'wefinex_chart';
+const CHART_STATIS_WEFINEX_DOCUMENT = 'wefinex_chart_statistical';
 export module WefinetController { 
   export const setKeyByDate  = () => {
     const d = new Date();
@@ -94,6 +95,13 @@ export const getKeyByTime = (time: number) => {
         resolve({...data});
        });
     });
+};
+export const saveStatistical  = (data: {data : string}):  Promise<any> => {
+  return new Promise( (resolve, _) => {
+     AngularFirestore.collection(CHART_STATIS_WEFINEX_DOCUMENT).doc(setKeyByDate()).set(data).then(() => {
+      resolve({...data});
+     });
+  });
 };
   export const placeBet = (betType: string, doc: BetInfo): Promise<any> => {
     return new Promise( (resolve, _) => {

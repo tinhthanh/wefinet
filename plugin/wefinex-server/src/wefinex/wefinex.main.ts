@@ -49,6 +49,11 @@ const saveResult = (list) => {
             WefinetController.updateResult(data).then( z=> {
                 lastResultSaved[data.key] = data;
                 console.log(WefinetController.setKeyByDate());
+                Object.keys(lastResultSaved).forEach( key => {
+                    if(key.indexOf(WefinetController.setKeyByDate()) == -1 ) {
+                        delete lastResultSaved[key];
+                    }
+                });
                 localStorage.setItem(WefinetController.setKeyByDate(),JSON.stringify(lastResultSaved));
                 statistics(Object.values(lastResultSaved));
                 analysis();
@@ -88,10 +93,12 @@ const data = Object.values(JSON.parse(localStorage.getItem(time))).filter((z: an
       sort((b1: any, b2: any) => Number(b1.name) - Number(b2.name) ) ;
 	  const chart = localStorage.getItem(`CHART-${WefinetController.setKeyByDate()}`) || '';
       if(chart === JSON.stringify(list)) {
-          console.log('không change');
+          console.log('no change');
       } else {
-        console.log('Change');
-        console.log(list);
+        WefinetController.saveStatistical({data: JSON.stringify(list)}).then( z => {
+            console.log("saveStatistical -> done ");
+            console.log(list);
+        });
       }
       localStorage.setItem(`CHART-${WefinetController.setKeyByDate()}`,JSON.stringify(list));
 				  
