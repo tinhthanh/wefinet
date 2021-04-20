@@ -56,6 +56,13 @@ const saveResult = (list) => {
                 });
                 localStorage.setItem(WefinetController.setKeyByDate(),JSON.stringify(lastResultSaved));
                 statistics(Object.values(lastResultSaved));
+
+                var time  = WefinetController.setKeyByDate();			  
+                const f1 = Object.values(JSON.parse(localStorage.getItem(time))).filter((z: any) => z.key.startsWith(time)).sort( (a: any, b: any) => { return  b.createdTime - a.createdTime  ; });
+ 
+                const f2 = f1.map((item: any) => { return { x : new Date(item.createdTime), y: [item.openPrice ,item.highPrice , item.lowPrice , item.closePrice]}}).slice(0,27).reverse();
+                WefinetController.saveStatisticalStock({data: JSON.stringify(f2)}).then( l => { console.log("save -> stock -> done")})
+                console.log(f2);
                 analysis();
                 console.log("saved ----> "  + data.key + " " + data.type + " " +  data.status) ;
                setTimeout(( ) => { window.location.reload(); } , 10*1000) 
@@ -83,7 +90,7 @@ const data = Object.values(JSON.parse(localStorage.getItem(time))).filter((z: an
         same = d;
 
       }
-      if(result.length > 1){
+      if(result.length > 2){
         const listKey = result.map(k => k.type).join('') ;
         const key  = listKey.length + listKey[0] ;
         obj[key]  =  [...(obj[key] || [] ), result[0].key.split(' ')[1]];

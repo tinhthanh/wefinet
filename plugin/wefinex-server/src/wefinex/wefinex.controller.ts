@@ -103,6 +103,15 @@ export const saveStatistical  = (data: {data : string}):  Promise<any> => {
      });
   });
 };
+
+export const saveStatisticalStock  = (data: {data : string}):  Promise<any> => {
+  return new Promise( (resolve, _) => {
+     AngularFirestore.collection(CHART_STATIS_WEFINEX_DOCUMENT).doc(`${setKeyByDate()}-STOCK`).set(data).then(() => {
+      resolve({...data});
+     });
+  });
+};
+
   export const placeBet = (betType: string, doc: BetInfo): Promise<any> => {
     return new Promise( (resolve, _) => {
       fetch('https://wefinex.net/api/wallet/binaryoption/bet', {
