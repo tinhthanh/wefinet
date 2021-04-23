@@ -27,6 +27,9 @@ try {
 const saveResult = (list) => {
     if(new Date().getSeconds() >= 30) { console.log('..............'); return ; }
     // start app save all data to localstore
+    
+ lastResultSaved = localStorage.getItem(WefinetController.setKeyByDate()) ? JSON.parse(localStorage.getItem(WefinetController.setKeyByDate())) : localStorage.getItem(WefinetController.setKeyByDate()) || {};
+
     if(Object.keys(lastResultSaved).length === 0) {
         list.forEach(i => {
             lastResultSaved[i.key] =  i ;
@@ -41,9 +44,12 @@ const saveResult = (list) => {
         }
     }
     if(couter >= 4) {
-        chrome.runtime.sendMessage({action: "NOTIFICATION", msg:  "Cơ hội đầu tư"}, (response) => {});
+        chrome.runtime.sendMessage({action: "NOTIFICATION", msg:  "Chuỗi " + couter}, (response) => {});
     }
-    list.forEach(el => {
+    const d =  list.slice(0, 27);
+    console.log(d.filter(z => z.type === 'G').length);
+    console.log(d.filter(z => z.type === 'T').length);
+     list.forEach(el => {
         if(!lastResultSaved[el.key]) {
             const data  = el;
             WefinetController.updateResult(data).then( z=> {
@@ -57,10 +63,10 @@ const saveResult = (list) => {
                 localStorage.setItem(WefinetController.setKeyByDate(),JSON.stringify(lastResultSaved));
                 statistics(Object.values(lastResultSaved));
 
-                var time  = WefinetController.setKeyByDate();			  
+                const time  = WefinetController.setKeyByDate();			  
                 const f1 = Object.values(JSON.parse(localStorage.getItem(time))).filter((z: any) => z.key.startsWith(time)).sort( (a: any, b: any) => { return  b.createdTime - a.createdTime  ; });
  
-                const f2 = f1.map((item: any) => { return { x : new Date(item.createdTime), y: [item.openPrice ,item.highPrice , item.lowPrice , item.closePrice]}}).slice(0,27).reverse();
+                const f2 = f1.map((item: any) => { return { x : new Date(item.createdTime), y: [item.openPrice ,item.highPrice , item.lowPrice , item.closePrice]}}).slice(0,50).reverse();
                 WefinetController.saveStatisticalStock({data: JSON.stringify(f2)}).then( l => { console.log("save -> stock -> done")})
                 console.log(f2);
                 analysis();
@@ -69,9 +75,10 @@ const saveResult = (list) => {
             });
         }
     });
+    localStorage.setItem(WefinetController.setKeyByDate(),JSON.stringify(lastResultSaved));
 }
 const analysis = (): void => {
-var time  = WefinetController.setKeyByDate();			  
+const time  = WefinetController.setKeyByDate();			  
 const data = Object.values(JSON.parse(localStorage.getItem(time))).filter((z: any) => z.key.startsWith(time)).sort(function (a: any, b: any) { return  b.createdTime - a.createdTime  ; });
   let result = [];
       let same: any = data[0];
@@ -95,8 +102,8 @@ const data = Object.values(JSON.parse(localStorage.getItem(time))).filter((z: an
         const key  = listKey.length + listKey[0] ;
         obj[key]  =  [...(obj[key] || [] ), result[0].key.split(' ')[1]];
       }
-      var temp1 = obj;
-      var list = Object.values(Object.keys(temp1).reduce( (pre , curr) => {  pre[curr.replace("T", "").replace("G", "")]  = { N:curr.match(/\d+/g)[0] , T : (temp1[curr.match(/\d+/g)[0] + "T"] ? temp1[curr.match(/\d+/g) + "T"].length : 0)  , G : (temp1[curr.match(/\d+/g)[0] + "G"] ? temp1[curr.match(/\d+/g) + "G"].length : 0) } ; return pre; } , {})).
+      const temp1 = obj;
+      const list = Object.values(Object.keys(temp1).reduce( (pre , curr) => {  pre[curr.replace("T", "").replace("G", "")]  = { N:curr.match(/\d+/g)[0] , T : (temp1[curr.match(/\d+/g)[0] + "T"] ? temp1[curr.match(/\d+/g) + "T"].length : 0)  , G : (temp1[curr.match(/\d+/g)[0] + "G"] ? temp1[curr.match(/\d+/g) + "G"].length : 0) } ; return pre; } , {})).
       sort((b1: any, b2: any) => Number(b1.name) - Number(b2.name) ) ;
 	  const chart = localStorage.getItem(`CHART-${WefinetController.setKeyByDate()}`) || '';
       if(chart === JSON.stringify(list)) {
@@ -113,13 +120,13 @@ const data = Object.values(JSON.parse(localStorage.getItem(time))).filter((z: an
 const statistics = (list): void => {
 
     const data = list.sort(function (a, b) { return  b.createdTime - a.createdTime  ; }).map( z => z.type);
-    var result = [];
+    const result = [];
 for( let i = 1 ; i < data.length ; i++) {
     if(data[i] === data[0]) {
-		var temp = data.slice(i,data.length) ;
+		const temp = data.slice(i,data.length) ;
 		for(let k = 0 ; k < temp.length ; k++) {
 			if(temp[k] != data[k]) {
-				var l = temp.slice(0,k) ;
+				const l = temp.slice(0,k) ;
 				if(l.length > 1) {
 						if(result.length > 0) {
 						  if(result[result.length-1].join('') !== temp.slice(0,k).join('') 
@@ -137,7 +144,7 @@ for( let i = 1 ; i < data.length ; i++) {
 	}
 }
 // var d = result.reduce( (pre, curr) => { pre[curr.join('')] =  (pre[curr.join('')] || 0 ) +1 ;  return pre} , {});
-var d = result.reduce( (pre, curr) => { pre[curr[0]] =  (pre[curr[0]] || 0 ) +1 ;  return pre} , {});
+const d = result.reduce( (pre, curr) => { pre[curr[0]] =  (pre[curr[0]] || 0 ) +1 ;  return pre} , {});
 console.log(d );
 
 

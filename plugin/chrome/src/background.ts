@@ -49,7 +49,9 @@ const setUserInfo = (u) => {
         reloadWefinexPape();
       }
     });
+    console.log(u.e)
     subUserFirebase = WefinetController.actionAutoBetOnChange(u.e, (user: User) => {
+    console.log(user);
       if (user && user.auto) {
         console.log(user.followByCommand);
         subBetFirebase && subBetFirebase.unsubscribe();
