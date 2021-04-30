@@ -1,6 +1,5 @@
 import  { WefinetController } from './wefinex.controller';
-let reload ;
-
+let reload;
 let lastResultSaved = localStorage.getItem(WefinetController.setKeyByDate()) ? JSON.parse(localStorage.getItem(WefinetController.setKeyByDate())) : localStorage.getItem(WefinetController.setKeyByDate()) || {};
 try {
       const actionType =  new URL(window.location.href).searchParams.get("actionType") || "MAIN";
@@ -49,7 +48,7 @@ const saveResult = (list) => {
     const d =  list.slice(0, 27);
     console.log(d.filter(z => z.type === 'G').length);
     console.log(d.filter(z => z.type === 'T').length);
-     list.forEach(el => {
+     list.slice(0,25).forEach(el => {
         if(!lastResultSaved[el.key]) {
             const data  = el;
             WefinetController.updateResult(data).then( z=> {
